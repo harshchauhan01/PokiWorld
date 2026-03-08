@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { getPokemon } from "../services/pokeAPI";
 import PokeCard from '../components/pokeCard';
+import {useNavigate} from "react-router-dom"
 
 export default function Home() {
+    const navigate = useNavigate();
     const [data, setData] = useState([]);
     const [url, setUrl] = useState("https://pokeapi.co/api/v2/pokemon?limit=20&offset=0");
     const [loading, setLoading] = useState(true);
@@ -31,6 +33,10 @@ export default function Home() {
     const handleNavigation = (newUrl) => {
         setUrl(newUrl);
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const handlexplore = (id,name) => {
+        navigate(`/pokemon/${name}`);
     };
 
     return (
@@ -114,6 +120,7 @@ export default function Home() {
                                         name={d.name}
                                         image={imgUrl}
                                         delay={index * 50}
+                                        onExplore={handlexplore}
                                     />
                                 </div>
                             );
