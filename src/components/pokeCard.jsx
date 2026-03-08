@@ -1,171 +1,92 @@
 import React from 'react';
-import styled from 'styled-components';
 
-const PokeCard = ({
-  name = 'Charizard',
-  image = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png',
-  type = 'Fire',
-  hp = 78,
-  attack = 84,
-  defense = 78,
-  speed = 100,
-}) => {
-  const typeColors = {
-    Fire: { primary: '#F08030', secondary: '#FFF3E0', gradient: 'linear-gradient(135deg, #F08030, #FF6B35, #FFA726)' },
-    Water: { primary: '#6890F0', secondary: '#E3F2FD', gradient: 'linear-gradient(135deg, #6890F0, #42A5F5, #29B6F6)' },
-    Grass: { primary: '#78C850', secondary: '#E8F5E9', gradient: 'linear-gradient(135deg, #78C850, #66BB6A, #43A047)' },
-    Electric: { primary: '#F8D030', secondary: '#FFFDE7', gradient: 'linear-gradient(135deg, #F8D030, #FFEE58, #FDD835)' },
-    Psychic: { primary: '#F85888', secondary: '#FCE4EC', gradient: 'linear-gradient(135deg, #F85888, #EC407A, #F06292)' },
-    Ice: { primary: '#98D8D8', secondary: '#E0F7FA', gradient: 'linear-gradient(135deg, #98D8D8, #80DEEA, #4DD0E1)' },
-    Dragon: { primary: '#7038F8', secondary: '#EDE7F6', gradient: 'linear-gradient(135deg, #7038F8, #7C4DFF, #651FFF)' },
-    Normal: { primary: '#A8A878', secondary: '#F5F5F5', gradient: 'linear-gradient(135deg, #A8A878, #BDBDBD, #9E9E9E)' },
-    Poison: { primary: '#A040A0', secondary: '#F3E5F5', gradient: 'linear-gradient(135deg, #A040A0, #AB47BC, #8E24AA)' },
-    Ground: { primary: '#E0C068', secondary: '#FFF8E1', gradient: 'linear-gradient(135deg, #E0C068, #D4A03C, #C49A2A)' },
-    Fighting: { primary: '#C03028', secondary: '#FFEBEE', gradient: 'linear-gradient(135deg, #C03028, #E53935, #D32F2F)' },
-    Rock: { primary: '#B8A038', secondary: '#F5F5DC', gradient: 'linear-gradient(135deg, #B8A038, #A09028, #8B7D2E)' },
-    Bug: { primary: '#A8B820', secondary: '#F1F8E9', gradient: 'linear-gradient(135deg, #A8B820, #9E9D24, #827717)' },
-    Ghost: { primary: '#705898', secondary: '#EDE7F6', gradient: 'linear-gradient(135deg, #705898, #7E57C2, #5E35B1)' },
-    Dark: { primary: '#705848', secondary: '#EFEBE9', gradient: 'linear-gradient(135deg, #705848, #6D4C41, #5D4037)' },
-    Steel: { primary: '#B8B8D0', secondary: '#ECEFF1', gradient: 'linear-gradient(135deg, #B8B8D0, #90A4AE, #78909C)' },
-    Fairy: { primary: '#EE99AC', secondary: '#FCE4EC', gradient: 'linear-gradient(135deg, #EE99AC, #F48FB1, #F06292)' },
-    Flying: { primary: '#A890F0', secondary: '#EDE7F6', gradient: 'linear-gradient(135deg, #A890F0, #9575CD, #7E57C2)' },
-  };
 
-  const colors = typeColors[type] || typeColors.Normal;
+const pokeCardStyles = `
+  @keyframes pokeCard__cardFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
 
-  const getStatWidth = (stat) => Math.min((stat / 150) * 100, 100);
+  @keyframes pokeCard__holoShimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
 
-  return (
-    <StyledWrapper $typeColor={colors.primary} $typeSecondary={colors.secondary} $typeGradient={colors.gradient}>
-      <div className="card">
-        {/* Holographic shimmer overlay */}
-        <div className="holo-overlay" />
+  @keyframes pokeCard__pokemonFloat {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
 
-        <div className="card-inner">
-          {/* Header */}
-          <div className="card-header">
-            <span className="pokemon-name">{name}</span>
-            <span className="pokemon-hp">
-              <span className="hp-label">HP</span>
-              <span className="hp-value">{hp}</span>
-              <span className="hp-icon">🔥</span>
-            </span>
-          </div>
+  .pokeCard__animateWrapper {
+    animation: pokeCard__cardFadeIn 0.5s ease-out forwards;
+    opacity: 0;
+  }
 
-          {/* Image Area */}
-          <div className="image-frame">
-            <div className="image-container">
-              <img src={image} alt={name} className="pokemon-image" />
-            </div>
-            <div className="image-border-decor" />
-          </div>
-
-          {/* Type Badge */}
-          <div className="type-row">
-            <div className="type-badge">
-              {type}
-            </div>
-            <span className="pokemon-id">PokeWorld</span>
-          </div>
-
-          {/* Divider */}
-          <div className="divider" />
-
-          {/* Stats */}
-          <div className="stats-container">
-            <div className="stat-row">
-              <span className="stat-label">⚔️ Attack</span>
-              <div className="stat-bar-bg">
-                <div className="stat-bar" style={{ width: `${getStatWidth(attack)}%` }} />
-              </div>
-              <span className="stat-value">{attack}</span>
-            </div>
-            <div className="stat-row">
-              <span className="stat-label">🛡️ Defense</span>
-              <div className="stat-bar-bg">
-                <div className="stat-bar" style={{ width: `${getStatWidth(defense)}%` }} />
-              </div>
-              <span className="stat-value">{defense}</span>
-            </div>
-            <div className="stat-row">
-              <span className="stat-label">⚡ Speed</span>
-              <div className="stat-bar-bg">
-                <div className="stat-bar" style={{ width: `${getStatWidth(speed)}%` }} />
-              </div>
-              <span className="stat-value">{speed}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </StyledWrapper>
-  );
-};
-
-const StyledWrapper = styled.div`
-  .card {
+  .pokeCard__container {
+    position: relative;
     width: 280px;
     border-radius: 16px;
-    background: ${({ $typeSecondary }) => $typeSecondary};
     padding: 10px;
     overflow: hidden;
-    box-shadow:
-      0 4px 15px rgba(0, 0, 0, 0.2),
-      0 0 30px ${({ $typeColor }) => $typeColor}33,
-      inset 0 1px 0 rgba(255, 255, 255, 0.4);
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-                box-shadow 0.4s ease;
-    font-family: 'Segoe UI', Arial, sans-serif;
-    position: relative;
-    border: 3px solid ${({ $typeColor }) => $typeColor};
     cursor: pointer;
+    border: 3px solid #6C5CE7;
+    background: #F0EDFF;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2), 0 0 30px rgba(108,92,231,0.2), inset 0 1px 0 rgba(255,255,255,0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
-  .card:hover {
-    transform: scale(1.05) rotateY(-2deg) rotateX(2deg);
-    box-shadow:
-      0 8px 30px rgba(0, 0, 0, 0.3),
-      0 0 50px ${({ $typeColor }) => $typeColor}55;
+  .pokeCard__container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25), 0 0 40px rgba(108,92,231,0.3), inset 0 1px 0 rgba(255,255,255,0.4);
   }
 
-  .card:hover .holo-overlay {
-    opacity: 0.15;
-  }
-
-  .card:hover .pokemon-image {
-    transform: scale(1.08);
-    filter: drop-shadow(0 8px 20px ${({ $typeColor }) => $typeColor}88);
-  }
-
-  .holo-overlay {
+  .pokeCard__holoOverlay {
     position: absolute;
     top: 0;
-    left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(
-      125deg,
-      transparent 0%,
-      rgba(255, 255, 255, 0.4) 25%,
-      transparent 35%,
-      rgba(255, 255, 255, 0.3) 50%,
-      transparent 65%,
-      rgba(255, 255, 255, 0.4) 80%,
-      transparent 100%
-    );
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
+    left: 0;
     z-index: 10;
     border-radius: 14px;
+    pointer-events: none;
+    background: linear-gradient(
+      105deg,
+      transparent 40%,
+      rgba(255, 255, 255, 0.3) 45%,
+      rgba(255, 255, 255, 0.5) 50%,
+      rgba(255, 255, 255, 0.3) 55%,
+      transparent 60%
+    );
+    background-size: 200% 100%;
+    animation: pokeCard__holoShimmer 3s infinite linear;
+    opacity: 0;
+    transition: opacity 0.3s ease;
   }
 
-  .card-inner {
+  .pokeCard__container:hover .pokeCard__holoOverlay {
+    opacity: 1;
+  }
+
+  .pokeCard__content {
     position: relative;
     z-index: 1;
   }
 
-  /* Header */
-  .card-header {
+  .pokeCard__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -173,183 +94,190 @@ const StyledWrapper = styled.div`
     margin-bottom: 6px;
   }
 
-  .pokemon-name {
-    font-size: 20px;
+  .pokeCard__name {
+    font-size: 1.25rem;
     font-weight: 800;
-    color: #1a1a2e;
+    color: #111827;
     text-transform: capitalize;
-    letter-spacing: 1px;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.025em;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    margin: 0;
   }
 
-  .pokemon-hp {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .hp-label {
-    font-size: 11px;
+  .pokeCard__id {
+    font-size: 0.875rem;
     font-weight: 700;
-    color: ${({ $typeColor }) => $typeColor};
-    letter-spacing: 1px;
+    color: #6C5CE7;
+    letter-spacing: 0.05em;
   }
 
-  .hp-value {
-    font-size: 22px;
-    font-weight: 900;
-    color: #1a1a2e;
-  }
-
-  .hp-icon {
-    font-size: 14px;
-  }
-
-  /* Image Frame */
-  .image-frame {
+  .pokeCard__imageFrame {
     position: relative;
     margin: 0 4px;
-    border-radius: 10px;
+    border-radius: 12px;
     overflow: hidden;
-    border: 3px solid ${({ $typeColor }) => $typeColor}66;
+    border: 3px solid rgba(108, 92, 231, 0.4);
   }
 
-  .image-container {
+  .pokeCard__imageBackground {
+    position: relative;
     height: 170px;
-    background: ${({ $typeGradient }) => $typeGradient};
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
     overflow: hidden;
+    background: linear-gradient(135deg, #6C5CE7, #7C6FF0, #A29BFE);
   }
 
-  .image-container::before {
-    content: '';
-    position: absolute;
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.12);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-
-  .image-container::after {
-    content: '';
-    position: absolute;
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.08);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-
-  .pokemon-image {
+  .pokeCard__pokemonImage {
     width: 150px;
     height: 150px;
     object-fit: contain;
     position: relative;
     z-index: 2;
-    filter: drop-shadow(0 5px 15px ${({ $typeColor }) => $typeColor}66);
-    transition: transform 0.4s ease, filter 0.4s ease;
+    transition: transform 0.3s ease;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
   }
 
-  .image-border-decor {
+  .pokeCard__container:hover .pokeCard__pokemonImage {
+    animation: pokeCard__pokemonFloat 2s ease-in-out infinite;
+  }
+
+  .pokeCard__imageStrip {
     height: 4px;
-    background: ${({ $typeGradient }) => $typeGradient};
+    background: linear-gradient(135deg, #6C5CE7, #7C6FF0, #A29BFE);
   }
 
-  /* Type Badge */
-  .type-row {
+  .pokeCard__badgeRow {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 8px 10px 4px;
+    padding: 8px 10px 4px 10px;
   }
 
-  .type-badge {
-    background: ${({ $typeColor }) => $typeColor};
+  .pokeCard__typeBadge {
     color: white;
-    padding: 3px 16px;
-    border-radius: 20px;
+    padding: 4px 16px;
+    border-radius: 9999px;
     font-size: 11px;
     font-weight: 700;
-    letter-spacing: 1.5px;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    box-shadow: 0 2px 8px ${({ $typeColor }) => $typeColor}55;
+    background: #6C5CE7;
+    box-shadow: 0 2px 8px rgba(108,92,231,0.4);
+    border: none;
   }
 
-  .pokemon-id {
+  .pokeCard__brandLabel {
     font-size: 11px;
     font-weight: 700;
-    color: #666;
-    letter-spacing: 1px;
+    color: #6b7280;
+    letter-spacing: 0.05em;
   }
 
-  /* Divider */
-  .divider {
+  .pokeCard__divider {
     height: 2px;
     margin: 6px 10px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      ${({ $typeColor }) => $typeColor}44,
-      ${({ $typeColor }) => $typeColor},
-      ${({ $typeColor }) => $typeColor}44,
-      transparent
-    );
-    border-radius: 2px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, transparent, rgba(108,92,231,0.25), #6C5CE7, rgba(108,92,231,0.25), transparent);
   }
 
-  /* Stats */
-  .stats-container {
-    padding: 4px 10px 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  .pokeCard__buttonWrapper {
+    padding: 4px 10px 8px 10px;
   }
 
-  .stat-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  .pokeCard__exploreButton {
+    width: 100%;
+    padding: 10px 0;
+    border-radius: 12px;
+    color: white;
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+    background: linear-gradient(135deg, #6C5CE7, #7C6FF0);
+    box-shadow: 0 3px 12px rgba(108,92,231,0.35);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
   }
 
-  .stat-label {
-    font-size: 11px;
-    font-weight: 600;
-    color: #444;
-    min-width: 82px;
-    white-space: nowrap;
+  .pokeCard__exploreButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 18px rgba(108,92,231,0.5);
+    background: linear-gradient(135deg, #7C6FF0, #8B7FF5);
   }
 
-  .stat-bar-bg {
-    flex: 1;
-    height: 8px;
-    background: rgba(0, 0, 0, 0.08);
-    border-radius: 10px;
-    overflow: hidden;
-  }
-
-  .stat-bar {
-    height: 100%;
-    background: ${({ $typeGradient }) => $typeGradient};
-    border-radius: 10px;
-    transition: width 1s ease;
-    box-shadow: 0 1px 4px ${({ $typeColor }) => $typeColor}55;
-  }
-
-  .stat-value {
-    font-size: 13px;
-    font-weight: 800;
-    color: #1a1a2e;
-    min-width: 28px;
-    text-align: right;
+  .pokeCard__exploreButton:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(108,92,231,0.4);
   }
 `;
+
+const PokeCard = ({ id, name, image, onExplore, delay = 0 }) => {
+  const formattedId = `#${String(id).padStart(3, '0')}`;
+
+  return (
+    <>
+      <style>{pokeCardStyles}</style>
+      <div
+        className="pokeCard__animateWrapper"
+        style={{ animationDelay: `${delay}ms` }}
+      >
+        <div className="pokeCard__container">
+          {/* Holographic shimmer overlay */}
+          <div className="pokeCard__holoOverlay" />
+
+          <div className="pokeCard__content">
+            {/* Header */}
+            <div className="pokeCard__header">
+              <span className="pokeCard__name">
+                {name}
+              </span>
+              <span className="pokeCard__id">
+                {formattedId}
+              </span>
+            </div>
+
+            {/* Image Frame */}
+            <div className="pokeCard__imageFrame">
+              <div className="pokeCard__imageBackground">
+                <img
+                  src={image}
+                  alt={name}
+                  className="pokeCard__pokemonImage"
+                />
+              </div>
+              <div className="pokeCard__imageStrip" />
+            </div>
+
+            {/* Type Badge & ID row */}
+            <div className="pokeCard__badgeRow">
+              <div className="pokeCard__typeBadge">
+                Pokémon
+              </div>
+              <span className="pokeCard__brandLabel">
+                PokéWorld
+              </span>
+            </div>
+
+            {/* Divider */}
+            <div className="pokeCard__divider" />
+
+            {/* Explore Button */}
+            <div className="pokeCard__buttonWrapper">
+              <button
+                className="pokeCard__exploreButton"
+                onClick={() => onExplore(id, name)}
+              >
+                ✨ Explore
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
 
 export default PokeCard;

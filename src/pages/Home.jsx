@@ -11,13 +11,11 @@ export default function Home(){
     useEffect(()=>{
         const loadData=async ()=>{
             const res=await getPokemon(url);
-            console.log(res);
-            console.log(url);
-            
             setData(res);
         }
         loadData();
     },[url]);
+    
     
     return(
         <div className='body'>
@@ -32,14 +30,10 @@ export default function Home(){
             <div className="showcase">
                 {data?.results?.map((d)=>{
                     const idx=d.url.split('/')[6]
-                    const imgUrl=`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${idx}.png`;
+                    const imgUrl=`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${idx}.png`;
                     return(
-                        <div className='cont-box'>
-                            {/* <img alt={d.name}
-                                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${idx}.png`}
-                            />
-                            <h1>{d.name}</h1> */}
-                            <PokeCard name={d.name} image={imgUrl} />
+                        <div className='cont-box' key={idx}>
+                            <PokeCard id={idx} name={d.name} image={imgUrl} />
                         </div>
                     );
                 })}
