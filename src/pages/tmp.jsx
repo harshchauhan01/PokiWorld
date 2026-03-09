@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import {useParams,useNavigate} from "react-router-dom";
-import axios from "axios";
-import {getPokemon} from "../services/pokeAPI";
 import {
   Search,
   Heart,
@@ -33,8 +30,6 @@ import {
   X,
   Loader2,
 } from 'lucide-react';
-
-
 
 // Type colors and gradients
 const typeConfig = {
@@ -357,25 +352,19 @@ const SpriteCard = ({ src, label }) => (
 );
 
 // Main Pokemon Page Component
-const PokeDetails = () => {
-  const navigate=useNavigate();
-  const {name}=useParams();
+const Tmp = () => {
   const [pokemon, setPokemon] = useState(null);
   const [species, setSpecies] = useState(null);
   const [evolutionChain, setEvolutionChain] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentSprite, setCurrentSprite] = useState('official');
-  const [searchId, setSearchId] = useState(name);
+  const [searchId, setSearchId] = useState('charizard');
   const [inputValue, setInputValue] = useState('');
   const [isFavorite, setIsFavorite] = useState(false);
   const [showShiny, setShowShiny] = useState(false);
   const [activeTab, setActiveTab] = useState('stats');
   const [isPlaying, setIsPlaying] = useState(false);
-
-  useEffect(()=>{
-    setSearchId(name);
-  },[name])
 
   useEffect(() => {
     fetchPokemon(searchId);
@@ -384,12 +373,10 @@ const PokeDetails = () => {
   const fetchPokemon = async (id) => {
     setLoading(true);
     setError(null);
-    
     try {
-      const url=`https://pokeapi.co/api/v2/pokemon/${id}`
-      console.log(url);
-      
-      const response = await fetch(url);
+      const response = await fetch(
+        `https://pokeapi.co/api/v2/pokemon/${id.toString().toLowerCase()}`
+      );
       if (!response.ok) throw new Error('Pokemon not found!');
       const data = await response.json();
       setPokemon(data);
@@ -466,10 +453,6 @@ const PokeDetails = () => {
     return evolutions;
   };
 
-  const handleClick=(name)=>{
-    navigate(`/pokemon/${name}`)
-  }
-
   const primaryType = pokemon?.types[0]?.type.name || 'normal';
   const typeSettings = typeConfig[primaryType] || typeConfig.normal;
 
@@ -523,11 +506,55 @@ const PokeDetails = () => {
         }}
       />
 
+      {/* Header */}
+      <header className="relative z-50">
+        <div className="absolute inset-0 bg-gradient-to-r from-red-600/90 to-red-500/90 backdrop-blur-xl" />
+
+        <div className="container mx-auto px-4 py-4 relative">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
+            {/* Logo */}
+            <div className="flex items-center gap-4">
+              <div className="relative w-14 h-14">
+                <div className="absolute inset-0 bg-white rounded-full shadow-lg shadow-white/30" />
+                <div className="absolute inset-2 bg-gradient-to-br from-red-500 to-red-600 rounded-full" />
+                <div className="absolute top-1/2 left-0 right-0 h-1 bg-gray-800 -translate-y-1/2" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full border-2 border-gray-800" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-black text-white tracking-tight">
+                  PokéWorld
+                </h1>
+                <p className="text-red-200 text-sm">Gotta catch 'em all!</p>
+              </div>
+            </div>
+
+            {/* Search */}
+            <form onSubmit={handleSearch} className="flex gap-3 w-full lg:w-auto">
+              <div className="relative flex-1 lg:w-80">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" />
+                <input
+                  type="text"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  placeholder="Search by name or number..."
+                  className="w-full pl-12 pr-6 py-3 rounded-2xl bg-white/20 backdrop-blur-xl border border-white/30 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all"
+                />
+              </div>
+              <button
+                type="submit"
+                className="px-8 py-3 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-300 hover:to-yellow-400 rounded-2xl font-bold text-gray-900 transition-all hover:scale-105 hover:shadow-xl hover:shadow-yellow-500/30 active:scale-95 flex items-center gap-2"
+              >
+                <Search className="w-5 h-5" />
+                <span className="hidden sm:inline">Search</span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </header>
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8 relative z-10">
         <div className="grid xl:grid-cols-5 gap-8">
-
           {/* Left Side - Pokemon Showcase */}
           <div className="xl:col-span-2 space-y-6">
             {/* Main Pokemon Card */}
@@ -895,13 +922,11 @@ const PokeDetails = () => {
                       <div
                         key={index}
                         className="bg-white/10 rounded-2xl p-4 hover:bg-white/20 transition-all hover:scale-105 cursor-pointer"
-                        
                       >
                         <img
                           src={sprite.src}
                           alt={sprite.label}
                           className="w-full h-32 object-contain"
-                          
                         />
                         <p className="text-center text-white/70 text-sm mt-2 font-medium">
                           {sprite.label}
@@ -923,7 +948,7 @@ const PokeDetails = () => {
                   {getEvolutions().map((evo, index) => (
                     <React.Fragment key={evo.name}>
                       <button
-                        onClick={() => handleClick(evo.name)}
+                        onClick={() => setSearchId(evo.name)}
                         className={`flex flex-col items-center p-3 rounded-xl transition-all hover:scale-110 ${
                           evo.name === pokemon?.name
                             ? 'bg-white/20 border-2 border-white/50 shadow-lg'
@@ -995,4 +1020,4 @@ const PokeDetails = () => {
   );
 };
 
-export default PokeDetails;
+export default Tmp;
