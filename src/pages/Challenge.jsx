@@ -202,7 +202,6 @@ const Challenge = () => {
         species: speciesResponse.data,
       };
       setPokemonData(res);
-      console.log(res?.name);
       
     } catch (error) {
       console.error('Error fetching Pokemon:', error);

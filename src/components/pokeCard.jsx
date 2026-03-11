@@ -270,7 +270,7 @@ const PokeCard = ({ id, name, image, onExplore, delay = 0 }) => {
                 className="pokeCard__exploreButton"
                 onClick={() => onExplore(id, name)}
               >
-                ✨ Explore
+                Explore
               </button>
             </div>
           </div>

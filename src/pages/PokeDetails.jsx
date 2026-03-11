@@ -387,7 +387,6 @@ const PokeDetails = () => {
     
     try {
       const url=`https://pokeapi.co/api/v2/pokemon/${id}`
-      console.log(url);
       
       const response = await fetch(url);
       if (!response.ok) throw new Error('Pokemon not found!');
