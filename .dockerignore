@@ -1,6 +1,9 @@
 node_modules
+dist
 build
 .git
-.gitignore
-Dockerfile
+.github
+.vscode
+npm-debug.log
+Dockerfile*
 README.md
